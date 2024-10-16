@@ -1,12 +1,16 @@
-import matplotlib.pyplot as plt
 import csv
+import matplotlib.pyplot as plt
 import numpy as np
+import os
+
+output_folder = 'output/'
+
 
 # Read execution times from the CSV file
 tools = []
 execution_times = []
 
-with open('execution_times.csv', 'r') as csvfile:
+with open(os.path.join(output_folder, 'execution_times.csv'), 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader)  
     for row in csvreader:
@@ -28,13 +32,13 @@ for bar, value in zip(bars, execution_times):
 
 # Save the graph as an image file
 plt.tight_layout()
-plt.savefig('execution_times_chart.png')  # Saving
+plt.savefig(os.path.join(output_folder, 'execution_times_chart.png'))  # Saving
 
 # Read data for precisions from the CSV file
 precision_tool_names = []
 precisions = []
 
-with open('precisions.csv', 'r') as csvfile:
+with open(os.path.join(output_folder, 'precisions.csv'), 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader) 
     for row in csvreader:
@@ -45,7 +49,7 @@ with open('precisions.csv', 'r') as csvfile:
 recall_tool_names = []
 recalls = []
 
-with open('recalls.csv', 'r') as csvfile:
+with open(os.path.join(output_folder, 'recalls.csv'), 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader) 
     for row in csvreader:
@@ -79,4 +83,4 @@ for bar, value in zip(recall_bars, recalls):
 
 # Save the graph as an image file
 plt.tight_layout()
-plt.savefig('precision_recall_chart.png')  
+plt.savefig(os.path.join(output_folder, 'precision_recall_chart.png'))

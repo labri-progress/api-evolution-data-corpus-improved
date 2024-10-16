@@ -4,3 +4,13 @@ jezek_dietrich_tool_challenge.blg
 jezek_dietrich_tool_challenge.bbl
 jezek_dietrich_tool_challenge.synctex.gz
 jezek_dietrich_tool_challenge.aux
+
+.idea/
+
+bin/
+build/
+logs/
+output/
+!output/compatibility.csv
+
+tools/revapi/cache/

@@ -23,9 +23,9 @@
     <property name="lib.new.bin" value="bin/bin-lib2"/>
 
     <!-- jar file names -->
-    <property name="client.jar" value="${client}.jar"/>
-    <property name="lib.new.jar" value="${lib.new}.jar"/>
-    <property name="lib.old.jar" value="${lib.old}.jar"/>
+    <property name="client.jar" value="build/${client}.jar"/>
+    <property name="lib.new.jar" value="build/${lib.new}.jar"/>
+    <property name="lib.old.jar" value="build/${lib.old}.jar"/>
 
     <!-- output file names -->
     <property name="binary.file" value="binary.txt"/>

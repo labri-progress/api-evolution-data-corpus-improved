@@ -1,16 +1,21 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-CSV_FILE="compatibility.csv"
-CSV_FILE_TMP="compatibility.csv.tmp"
-CSV_BENCHMARK_FILE="benchmark.csv"
+OUTPUT_DIR="output"
+REPORTS_DIR="$OUTPUT_DIR/reports"
+
+COMPATIBILITY_CSV_FILE="$OUTPUT_DIR/compatibility.csv"
+COMPATIBILITY_CSV_FILE_TMP="$OUTPUT_DIR/compatibility.csv.tmp"
+CSV_BENCHMARK_FILE="$OUTPUT_DIR/benchmark.csv"
+PRECISIONS_CSV_FILE="$OUTPUT_DIR/precisions.csv"
+RECALLS_CSV_FILE="$OUTPUT_DIR/recalls.csv"
+
 
 ## return "1" if incompatibility was detected in the row
 ## detected incompatibility is found by grep pattern matching
 function incompatibilityDetected() {
+    report="$REPORTS_DIR/$1"
 
-    report="tools/.reports/$1"
-
-    if grep -q "$2" $report ; then echo 1
+    if grep -q "$2" "$report" ; then echo 1
     else echo 0 ; fi
 }
 
@@ -19,24 +24,19 @@ function incompatibilityDetected() {
 # make sure the compatibility table is generated
 #./compatibility.sh
 
-cd tools
 # make sure the reports are generated
-./run.sh
+./tools/run.sh
 
 # All tools.
 TOOL_REPORTS=()
 
 # iterate reports and get report names from file-names
-for d in .reports/* ; do
+for d in "$REPORTS_DIR"/* ; do
 
     # cut only file name
     filename=$(basename "$d")
     TOOL_REPORTS+=("$filename")
 done
-
-cd ..
-
-
 
 
 #####
@@ -44,15 +44,15 @@ cd ..
 # The reason is: a test scenario could actually pass source/binary compatibility check
 ####
 
-# cp $CSV_FILE $CSV_BENCHMARK_FILE
+# cp $COMPATIBILITY_CSV_FILE $CSV_BENCHMARK_FILE
 # header
 echo "change,source,binary" > $CSV_BENCHMARK_FILE
 # compatible results (it has at least one "0" in the row
-cp $CSV_FILE $CSV_BENCHMARK_FILE
+cp $COMPATIBILITY_CSV_FILE $CSV_BENCHMARK_FILE
 # source incompatible only
-#grep "0,1" $CSV_FILE >> $CSV_BENCHMARK_FILE
+#grep "0,1" $COMPATIBILITY_CSV_FILE >> $CSV_BENCHMARK_FILE
 # binary incompatible + any source 
-#grep '.*,0$' $CSV_FILE >> $CSV_BENCHMARK_FILE
+#grep '.*,0$' $COMPATIBILITY_CSV_FILE >> $CSV_BENCHMARK_FILE
 
 
 # Initialize arrays for source and binary columns
@@ -103,7 +103,7 @@ recallsArray=()
 
 # iterate tools
 for filename in "${TOOL_REPORTS[@]}"; do
-    rm -f "$CSV_FILE_TMP"
+    rm -f "$COMPATIBILITY_CSV_FILE_TMP"
     allRetrieved=0  # Reset the sum of all retrieved BCs for each tool
     relevantRetrieved=0 # Reset the sum of relevant retrieved BCs for each tool
     index=0 
@@ -131,7 +131,7 @@ for filename in "${TOOL_REPORTS[@]}"; do
         
         
    
-        echo "${line},${value}" >> "$CSV_FILE_TMP"
+        echo "${line},${value}" >> "$COMPATIBILITY_CSV_FILE_TMP"
     done < "$CSV_BENCHMARK_FILE"
 
     # Calculate precision if allRetrieved is not zero
@@ -159,7 +159,7 @@ for filename in "${TOOL_REPORTS[@]}"; do
     recallsArray+=("$recall")
     precisionsArray+=("$precision")
     
-    cp "$CSV_FILE_TMP" "$CSV_BENCHMARK_FILE"
+    cp "$COMPATIBILITY_CSV_FILE_TMP" "$CSV_BENCHMARK_FILE"
 done
 
 
@@ -179,14 +179,14 @@ echo "$recallsArrayLine" >> "$CSV_BENCHMARK_FILE"
 
 
 # Clean up
-rm "$CSV_FILE_TMP"
+rm "$COMPATIBILITY_CSV_FILE_TMP"
 
 # Save the precisions and recalls arrays to separate CSV files
 
-echo "tool,precision" > precisions.csv
-paste -d ',' <(printf "%s\n" "${TOOL_REPORTS[@]}") <(printf "%s\n" "${precisionsArray[@]}") >> precisions.csv
-echo "tool,recall" > recalls.csv
-paste -d ',' <(printf "%s\n" "${TOOL_REPORTS[@]}") <(printf "%s\n" "${recallsArray[@]}") >> recalls.csv
+echo "tool,precision" > "$PRECISIONS_CSV_FILE"
+paste -d ',' <(printf "%s\n" "${TOOL_REPORTS[@]}") <(printf "%s\n" "${precisionsArray[@]}") >> "$PRECISIONS_CSV_FILE"
+echo "tool,recall" > "$RECALLS_CSV_FILE"
+paste -d ',' <(printf "%s\n" "${TOOL_REPORTS[@]}") <(printf "%s\n" "${recallsArray[@]}") >> "$RECALLS_CSV_FILE"
 
+pip3 install -r requirements.txt
 python3 plot.py
-

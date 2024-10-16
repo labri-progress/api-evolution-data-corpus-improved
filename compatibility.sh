@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-CSV_FILE="compatibility.csv"
+CSV_FILE="output/compatibility.csv"
 
 function write_csv_row() {
 
-    if grep -Fq "Compile failed;" source.txt
+    if grep -Fq "Compile failed;" output/source.txt
     then ss=0;
     else ss=1;
     fi
 
-    if grep -Fq "Java Result: -1" binary.txt
+    if grep -Fq "Java Result: -1" output/binary.txt
     then bb=0;
     else bb=1;
     fi
