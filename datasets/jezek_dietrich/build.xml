@@ -1,36 +1,34 @@
 <project default="jar">
-
-
     <!-- with the run-experiment target, this class is then executed with both the old and the new version of the 3rd party lib -->
     <property name="package" value="accessModifierClazzAccessDecrease"/>
     <property name="error1" value="clear"/>
 
     <property name="main" value="${package}.Main"/>
     <property name="client" value="client"/>
-    <property name="lib.old" value="lib-v1"/>
-    <property name="lib.new" value="lib-v2"/>
+    <property name="lib.old" value="v1"/>
+    <property name="lib.new" value="v2"/>
+    <property name="output_folder" value="output"/>
 
     <!-- sources -->
-    <property name="client.src" value="${client}/src/"/>
+    <property name="client.src" value="client/src/"/>
     <property name="lib.new.src" value="${lib.new}/src/"/>
     <property name="lib.old.src" value="${lib.old}/src/"/>
 
     <!-- tmp folders for compilation -->
-    <property name="client.bin" value="bin/bin-client"/>
-    <property name="client.old.bin" value="bin/bin-client-old"/>
-    <property name="client.new.bin" value="bin/bin-client-new"/>
-    <property name="lib.old.bin" value="bin/bin-lib1"/>
-    <property name="lib.new.bin" value="bin/bin-lib2"/>
+    <property name="client.bin" value="${output_folder}/bin/bin-client"/>
+    <property name="client.old.bin" value="${output_folder}/bin/bin-client-old"/>
+    <property name="client.new.bin" value="${output_folder}/bin/bin-client-new"/>
+    <property name="lib.old.bin" value="${output_folder}/bin/bin-lib1"/>
+    <property name="lib.new.bin" value="${output_folder}/bin/bin-lib2"/>
 
     <!-- jar file names -->
-    <property name="client.jar" value="build/${client}.jar"/>
-    <property name="lib.new.jar" value="build/${lib.new}.jar"/>
-    <property name="lib.old.jar" value="build/${lib.old}.jar"/>
+    <property name="client.jar" value="${output_folder}/build/client.jar"/>
+    <property name="lib.old.jar" value="${output_folder}/build/v1.jar"/>
+    <property name="lib.new.jar" value="${output_folder}/build/v2.jar"/>
 
     <!-- output file names -->
-    <property name="binary.file" value="binary.txt"/>
-    <property name="source.file" value="source.txt"/>
-
+    <property name="binary.file" value="${output_folder}/binary.txt"/>
+    <property name="source.file" value="${output_folder}/source.txt"/>
 
     <!-- Compile sources to classes -->
     <target name="compile" description="Compile source files to classes">
@@ -63,8 +61,8 @@
         <delete file="${binary.file}"/>
         <delete file="${source.file}"/>
         <delete dir="${client.bin}"/>
-        <delete dir="${client.old}"/>
-        <delete dir="${client.new}"/>
+        <delete dir="${client.old.bin}"/>
+        <delete dir="${client.new.bin}"/>
         <delete dir="${lib.old.bin}"/>
         <delete dir="${lib.new.bin}"/>
     </target>
@@ -125,7 +123,6 @@
             </classpath>
         </java>
         <record name="${binary.file}" action="stop"/>
-
     </target>
 
     <target name="compile-with-lib-version2" description="compile against new lib version">
@@ -143,5 +140,4 @@
         />
         <record name="${source.file}" action="stop"/>
     </target>
-
 </project>

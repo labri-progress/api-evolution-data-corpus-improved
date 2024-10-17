@@ -11,6 +11,6 @@ bin/
 build/
 logs/
 output/
-!output/compatibility.csv
+results/
 
 tools/revapi/cache/

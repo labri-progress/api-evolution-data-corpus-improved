@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-CSV_FILE="output/compatibility.csv"
+CSV_FILE="output/ground_truth.csv"
 
 function write_csv_row() {
-
     if grep -Fq "Compile failed;" output/source.txt
     then ss=0;
     else ss=1;
@@ -15,12 +14,10 @@ function write_csv_row() {
     fi
 
     row="$1,$ss,$bb"
-    echo $row >> $CSV_FILE
+    echo "$row" >> $CSV_FILE
 }
 
 echo "change,source,binary" > $CSV_FILE
-# make sure all is build
-ant jar
 
 # iterate dirs - each dir is one experiment
 for d in client/src/*/ ; do
@@ -28,5 +25,7 @@ for d in client/src/*/ ; do
     # run experiment for each package
     filename=$(basename "$d")
     ant run-experiments -Dpackage="$filename"
-    write_csv_row $filename
+    write_csv_row "$filename"
 done
+
+rm output/binary.txt output/source.txt
