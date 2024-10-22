@@ -12,5 +12,8 @@ build/
 logs/
 output/
 results/
+target/
 
 tools/revapi/cache/
+
+*.tmp

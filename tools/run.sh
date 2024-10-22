@@ -34,7 +34,7 @@ echo "********* Revapi *********"
 record_execution_time "Revapi" "tools/revapi/revapi.sh --extensions=org.revapi:revapi-java:0.28.1,org.revapi:revapi-reporter-text:0.15.0 --old=$dataset_dir/output/build/v1.jar --new=$dataset_dir/output/build/v2.jar -Drevapi.reporter.text.minSeverity=POTENTIALLY_BREAKING > $reports_path/revapi.txt"
 
 echo "********* japicmp *********"
-record_execution_time "japicmp" "java -jar tools/japicmp/japicmp-0.23.0-jar-with-dependencies.jar -o $dataset_dir/output/build/v1.jar -n $dataset_dir/output/build/v2.jar -b -m > $reports_path/japicmp.txt"
+record_execution_time "japicmp" "java -jar tools/japicmp/japicmp-0.23.0-jar-with-dependencies.jar -o $dataset_dir/output/build/v1.jar -n $dataset_dir/output/build/v2.jar -b -m --ignore-missing-classes > $reports_path/japicmp.txt"
 
 echo "********* Roseau *********"
 record_execution_time "Roseau" "java -jar tools/roseau/roseau-0.0.4-SNAPSHOT-jar-with-dependencies.jar --diff --v1 $dataset_dir/v1 --v2 $dataset_dir/v2 --report=$results_dir/roseau.csv  > $reports_path/roseau.txt"

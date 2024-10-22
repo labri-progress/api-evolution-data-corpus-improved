@@ -1,7 +1,6 @@
 #!/bin/bash
 
 DATASETS_DIR="datasets"
-OUTPUT_DIR="output"
 RESULTS_DIR="results"
 
 BUILD_SCRIPT="build.sh"
@@ -39,7 +38,6 @@ for bench_dir in "$DATASETS_DIR"/* ; do
     echo "Current Benchmark: $bench_name"
 
     cd "$bench_dir" || return
-    [ -d "$OUTPUT_DIR" ] || mkdir "$OUTPUT_DIR"
 
     echo "Running build script..."
     sh "$BUILD_SCRIPT"
@@ -134,7 +132,7 @@ for bench_dir in "$DATASETS_DIR"/* ; do
             precision=0.00
         fi
 
-        if [ "$allRetrieved" -ne 0 ]; then
+        if [ "$allRelevant" -ne 0 ]; then
             recall=$(echo "scale=4; $relevantRetrieved / $allRelevant * 100 " | bc)
         else
             recall=0.00
@@ -149,13 +147,13 @@ for bench_dir in "$DATASETS_DIR"/* ; do
         cp "$benchmark_tmp_csv_path" "$benchmark_csv_path"
     done
 
-    precisionsArrayLine="Precision, ,"
+    precisionsArrayLine="Precision,,"
     for precision in "${precisionsArray[@]}"; do
         precisionsArrayLine+=",$precision"
     done
     echo "$precisionsArrayLine" >> "$benchmark_csv_path"
 
-    recallsArrayLine="Recall, ,"
+    recallsArrayLine="Recall,,"
     for recall in "${recallsArray[@]}"; do
         recallsArrayLine+=",$recall"
     done
