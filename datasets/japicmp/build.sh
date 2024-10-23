@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+mvn clean
 mvn package
 
 [ -d "output/build" ] || mkdir -p "output/build"

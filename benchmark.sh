@@ -35,6 +35,9 @@ pip3 install -r requirements.txt
 
 for bench_dir in "$DATASETS_DIR"/* ; do
     bench_name="${bench_dir##*/}"
+    if [ "$bench_name" == "japicmp" ] || [ "$bench_name" == "revapi" ] || [ "$bench_name" == "jezek_dietrich" ] ; then
+        continue
+    fi
     echo "Current Benchmark: $bench_name"
 
     cd "$bench_dir" || return
